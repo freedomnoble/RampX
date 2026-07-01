@@ -44,7 +44,7 @@ export default function TopNav({ onAuthOpen }) {
             <button
               data-testid="nav-logout"
               onClick={() => { logout(); navigate("/dashboard"); }}
-              className="flex items-center gap-2 rounded-full px-3.5 py-2.5 text-sm font-semibold text-slate2 hover:text-brand-pink shadow-neu-sm transition-all"
+              className="flex items-center gap-2 rounded-full px-3.5 py-2.5 text-sm font-semibold text-slate2 hover:text-brand-pink shadow-neu-sm transition-all whitespace-nowrap"
             >
               <LogOut size={17} strokeWidth={2.2} />
               <span className="hidden lg:inline">Sign out</span>
