@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import { AppProvider, useApp } from "@/context/AppContext";
 import TopNav from "@/components/TopNav";
 import AuthModal from "@/components/AuthModal";
+import TaskDrawer from "@/components/TaskDrawer";
 import Onboarding from "@/pages/Onboarding";
 import Dashboard from "@/pages/Dashboard";
 import CompanyPage from "@/pages/CompanyPage";
@@ -27,6 +28,7 @@ function Shell({ children }) {
     <>
       <TopNav onAuthOpen={() => setAuthOpen(true)} />
       {React.cloneElement(children, { onAuthOpen: () => setAuthOpen(true) })}
+      <TaskDrawer />
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
     </>
   );
