@@ -30,7 +30,7 @@ export default function LearningDeck({ cards = [], compact }) {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <div className={"relative w-full " + (compact ? "h-[250px]" : "h-[340px] max-w-[460px]")}>
+      <div className={"relative w-full " + (compact ? "h-[250px]" : "h-[360px]")}>
         {remaining.slice(0, 3).reverse().map((card, ri) => {
           const stackPos = remaining.slice(0, 3).length - 1 - ri;
           const isTop = stackPos === 0;
@@ -50,6 +50,7 @@ export default function LearningDeck({ cards = [], compact }) {
               <div
                 onClick={() => isTop && setFlipped((f) => !f)}
                 className="bg-neu rounded-3xl shadow-neu w-full h-full p-6 flex flex-col cursor-pointer select-none"
+                style={isTop ? { boxShadow: "10px 10px 24px rgba(166,180,200,0.75), -12px -12px 20px rgba(255,255,255,0.95), 0 26px 50px rgba(166,180,200,0.5)" } : undefined}
               >
                 {isTop && (
                   <div className="flex items-center justify-between mb-2">
@@ -59,18 +60,18 @@ export default function LearningDeck({ cards = [], compact }) {
                 )}
                 <h3 className="text-[20px] font-bold text-ink mt-1">{card.term}</h3>
                 {!flipped || !isTop ? (
-                  <p className="text-[15px] text-slate2 mt-3 leading-relaxed">{card.concept}</p>
+                  <p className={"text-[15px] text-slate2 mt-3 leading-relaxed " + (compact ? "line-clamp-3" : "line-clamp-4")}>{card.concept}</p>
                 ) : (
-                  <div className="mt-3 flex-1 overflow-y-auto">
-                    <p className="text-[14px] text-ink leading-relaxed">{card.detail}</p>
+                  <div className="mt-3 flex-1 min-h-0">
+                    <p className={"text-[14px] text-ink leading-relaxed " + (compact ? "line-clamp-4" : "line-clamp-6")}>{card.detail}</p>
                     {card.resource_url && (
                       <a
                         href={card.resource_url} target="_blank" rel="noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center gap-1.5 mt-4 text-sm font-bold text-brand-blue shadow-neu-sm rounded-full px-4 py-2"
+                        className="inline-flex items-center gap-1.5 mt-3 text-sm font-bold text-brand-blue"
                         data-testid="learning-resource-link"
                       >
-                        <ExternalLink size={14} /> {card.resource_label || "Learn more"}
+                        …more <ExternalLink size={13} />
                       </a>
                     )}
                   </div>

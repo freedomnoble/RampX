@@ -17,9 +17,9 @@ export default function LearningPage() {
         Swipe or flip cards to master {ws.product_area}. A new concept surfaces to the top every day.
       </p>
 
-      <NeuCard className="p-8 flex justify-center mb-10">
+      <div className="mb-12">
         <LearningDeck cards={cards} />
-      </NeuCard>
+      </div>
 
       <h2 className="text-[20px] font-bold text-ink mb-4">All concepts</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
