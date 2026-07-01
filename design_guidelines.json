@@ -1,0 +1,132 @@
+{
+  "theme": "Light",
+  "archetype": "3 (Pastel & Soft - Tailored for Neumorphism)",
+  "design_philosophy": "A modern 2026 take on Neumorphism. Tactile, soft, and physical interface relying on extruded/embossed soft cards with dual soft shadows and rounded corners. Generous white space, calm aesthetic to reduce cognitive load while ramping up.",
+  "colors": {
+    "background": "#ECF0F3",
+    "surface": "#ECF0F3",
+    "primary": "#6B92E5",
+    "secondary": "#7B81BE",
+    "accent": "#F88AB0",
+    "text_primary": "#2D3748",
+    "text_secondary": "#718096",
+    "border_subtle": "rgba(255,255,255,0.2)"
+  },
+  "typography": {
+    "font_family_headings": "'SF Pro Display', 'Manrope', system-ui, sans-serif",
+    "font_family_body": "'SF Pro Text', 'Inter', system-ui, sans-serif",
+    "h1": "text-[24px] font-bold tracking-tight text-[#2D3748]",
+    "h2": "text-[20px] font-bold tracking-tight text-[#2D3748]",
+    "h3": "text-[18px] font-semibold text-[#2D3748]",
+    "body": "text-[15px] font-medium leading-relaxed text-[#718096]",
+    "small": "text-[13px] font-medium text-[#718096]"
+  },
+  "spacing_and_layout": {
+    "container_padding": "p-8",
+    "section_gap": "gap-8",
+    "border_radius": "rounded-3xl",
+    "pill_radius": "rounded-full"
+  },
+  "shadows": {
+    "neumorph_raised": "10px 10px 24px rgba(166, 180, 200, 0.7), -12px -12px 20px rgba(255, 255, 255, 0.8)",
+    "neumorph_inset": "inset 10px 10px 24px rgba(166, 180, 200, 0.7), inset -12px -12px 20px rgba(255, 255, 255, 0.8)",
+    "neumorph_hover": "5px 5px 15px rgba(166, 180, 200, 0.7), -5px -5px 15px rgba(255, 255, 255, 0.8)"
+  },
+  "components": {
+    "top_nav": {
+      "style": "Floating long pill, fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-[#ECF0F3] rounded-full px-6 py-3 flex gap-4",
+      "shadow": "neumorph_raised",
+      "active_item_shadow": "neumorph_inset",
+      "active_text_color": "#6B92E5"
+    },
+    "card": {
+      "style": "bg-[#ECF0F3] rounded-3xl p-6 transition-all duration-300",
+      "shadow": "neumorph_raised",
+      "hover_shadow": "neumorph_hover"
+    },
+    "button": {
+      "primary": "bg-[#ECF0F3] text-[#6B92E5] font-bold rounded-full px-6 py-3 shadow-[10px_10px_24px_rgba(166,180,200,0.7),-12px_-12px_20px_rgba(255,255,255,0.8)] active:shadow-[inset_10px_10px_24px_rgba(166,180,200,0.7),inset_-12px_-12px_20px_rgba(255,255,255,0.8)] transition-all",
+      "secondary": "bg-[#ECF0F3] text-[#7B81BE] font-bold rounded-full px-6 py-3 shadow-[10px_10px_24px_rgba(166,180,200,0.7),-12px_-12px_20px_rgba(255,255,255,0.8)] active:shadow-[inset_10px_10px_24px_rgba(166,180,200,0.7),inset_-12px_-12px_20px_rgba(255,255,255,0.8)] transition-all"
+    },
+    "input": {
+      "style": "w-full bg-[#ECF0F3] rounded-2xl px-5 py-4 text-[#2D3748] shadow-[inset_10px_10px_24px_rgba(166,180,200,0.7),inset_-12px_-12px_20px_rgba(255,255,255,0.8)] outline-none focus:ring-2 focus:ring-[#6B92E5]/50 border-none transition-all placeholder:text-[#A6B4C8]"
+    },
+    "tag": {
+      "style": "bg-[#ECF0F3] text-[#F88AB0] text-xs font-bold px-3 py-1 rounded-full shadow-[5px_5px_10px_rgba(166,180,200,0.5),-5px_-5px_10px_rgba(255,255,255,0.8)]"
+    }
+  },
+  "layout_strategy": {
+    "dashboard_grid": {
+      "base": "grid grid-cols-1 md:grid-cols-12 gap-8 pt-32 pb-12 px-8 max-w-[1600px] mx-auto",
+      "company_goals": "col-span-1 md:col-span-3 row-span-2",
+      "board_seats": "col-span-1 md:col-span-6 row-span-1 flex flex-col items-center",
+      "latest_release": "col-span-1 md:col-span-3 row-span-2",
+      "learning_deck": "col-span-1 md:col-span-6 row-span-1",
+      "competitors": "col-span-1 md:col-span-12 grid grid-cols-1 md:grid-cols-4 gap-8 mt-8"
+    }
+  },
+  "pages": {
+    "onboarding": {
+      "layout": "Flex center screen, soft neumorphic wizard card. Questions: Company name, Product area. Followed by loading animation simulating scraping."
+    },
+    "dashboard": {
+      "layout": "Modular grid defined in layout_strategy. Competitor cards span bottom."
+    },
+    "decision_tree": {
+      "layout": "Timeline view using neumorphic nodes. Project selection at top, 160-char text input with inset shadow, tags for goals."
+    }
+  },
+  "motion_and_interactions": {
+    "hover_state": "Elements with outer shadow compress slightly (blur decreases, distance decreases) to mimic tactile pressure.",
+    "active_state": "Buttons instantly swap from outer shadow to inset shadow to mimic being pressed down.",
+    "flashcard_swipe": "Framer motion for swipeable deck. Top card rotates slightly on drag. Exits left/right, revealing next card."
+  },
+  "icons": {
+    "library": "lucide-react",
+    "style": "Stroke-width 2, color matching text_secondary or accent colors. No solid fills."
+  },
+  "media": {
+    "avatars": [
+      {
+        "url": "https://images.unsplash.com/photo-1560250097-0b93528c311a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTF8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBjb3Jwb3JhdGUlMjBoZWFkc2hvdCUyMGF2YXRhcnxlbnwwfHx8fDE3ODI5MTIxNDR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Board member avatar 1"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTF8MHwxfHNlYXJjaHw0fHxwcm9mZXNzaW9uYWwlMjBjb3Jwb3JhdGUlMjBoZWFkc2hvdCUyMGF2YXRhcnxlbnwwfHx8fDE3ODI5MTIxNDR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Board member avatar 2"
+      },
+      {
+        "url": "https://images.pexels.com/photos/11655430/pexels-photo-11655430.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Board member avatar 3"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTF8MHwxfHNlYXJjaHwyfHxwcm9mZXNzaW9uYWwlMjBjb3Jwb3JhdGUlMjBoZWFkc2hvdCUyMGF2YXRhcnxlbnwwfHx8fDE3ODI5MTIxNDR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Board member avatar 4"
+      }
+    ],
+    "company_logos": [
+      {
+        "url": "https://images.pexels.com/photos/26576975/pexels-photo-26576975.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Placeholder for Competitor/Company logo"
+      }
+    ],
+    "backgrounds": [
+      {
+        "url": "https://images.unsplash.com/photo-1758448721149-aa0ce8e1b2c9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzcyUyMG9mZmljZSUyMGFic3RyYWN0fGVufDB8fHx8MTc4MjkxMjEzMXww&ixlib=rb-4.1.0&q=85",
+        "description": "Abstract office building for potential login/auth background"
+      }
+    ]
+  },
+  "testing": {
+    "data_testid_rule": "All interactive elements, forms, and cards MUST have a data-testid attribute in kebab-case."
+  },
+  "instructions_to_main_agent": [
+    "Ensure global background color is set to #ECF0F3.",
+    "Do NOT use standard Shadcn cards; instead build custom divs using the neumorphic shadow strings provided above. You can extend tailwind.config.js to include these custom box-shadows.",
+    "Extend tailwind.config.js with colors: primary '#6B92E5', secondary '#7B81BE', accent '#F88AB0', bg '#ECF0F3'.",
+    "Top Nav must be fixed and floating (pill shape). Add sufficient top padding to the main layout to prevent overlap.",
+    "For the Decision Tree timeline, use a left vertical border (neumorphic raised line) with circular nodes that have inset shadows.",
+    "For the Learning Deck, implement a simple stack UI using relative/absolute positioning where the top card has the most shadow and the ones beneath scale down slightly.",
+    "Use provided avatar images for the Board Seats component."
+  ]
+}
