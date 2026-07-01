@@ -30,7 +30,7 @@ export default function LearningDeck({ cards = [], compact }) {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <div className={"relative w-full " + (compact ? "h-[230px] max-w-[360px]" : "h-[320px] max-w-[440px]")}>
+      <div className={"relative w-full " + (compact ? "h-[250px]" : "h-[340px] max-w-[460px]")}>
         {remaining.slice(0, 3).reverse().map((card, ri) => {
           const stackPos = remaining.slice(0, 3).length - 1 - ri;
           const isTop = stackPos === 0;
@@ -38,9 +38,9 @@ export default function LearningDeck({ cards = [], compact }) {
             <motion.div
               key={card.term + index}
               className="absolute inset-0"
-              style={{ zIndex: 10 - stackPos }}
+              style={{ zIndex: 10 - stackPos, transformOrigin: "center top" }}
               initial={false}
-              animate={{ scale: 1 - stackPos * 0.05, y: stackPos * 14, opacity: 1 - stackPos * 0.15 }}
+              animate={{ scale: 1 - stackPos * 0.045, y: stackPos * 12, x: stackPos * 8, opacity: 1 - stackPos * 0.1 }}
               drag={isTop ? "x" : false}
               dragConstraints={{ left: 0, right: 0 }}
               onDragEnd={(e, info) => { if (Math.abs(info.offset.x) > 110) advance(); }}
