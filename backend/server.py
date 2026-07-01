@@ -135,6 +135,8 @@ Using the above, produce a JSON object with EXACTLY this shape:
   "competitors": [
     {{
       "name": "Competitor name",
+      "website": "competitor's official homepage URL (https://...)",
+      "linkedin": "competitor's LinkedIn company page URL (https://www.linkedin.com/company/...)",
       "strengths": ["short strength", "short strength"],
       "weaknesses": ["short weakness", "short weakness"],
       "differentiation": "1 sentence: how {company_name} is different or better than this competitor",

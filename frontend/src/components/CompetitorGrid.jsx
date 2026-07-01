@@ -1,7 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { TrendingUp, Check, AlertTriangle, Sparkles, Rocket } from "lucide-react";
+import { Check, AlertTriangle, Sparkles, Rocket, Globe, Linkedin } from "lucide-react";
 import { NeuCard } from "@/components/neu";
+
+const searchUrl = (q) => `https://www.google.com/search?q=${encodeURIComponent(q)}`;
+const linkedinUrl = (name) => `https://www.linkedin.com/search/results/companies/?keywords=${encodeURIComponent(name)}`;
 
 export default function CompetitorGrid({ competitors = [], companyName }) {
   if (!competitors.length) {
@@ -16,9 +19,31 @@ export default function CompetitorGrid({ competitors = [], companyName }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.08, duration: 0.5 }}
         >
-          <NeuCard hover className="p-6 h-full flex flex-col" data-testid={`competitor-card-${i}`}>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-2xl shadow-neu-inset flex items-center justify-center text-brand-purple font-extrabold">
+          <NeuCard hover className="p-6 h-full flex flex-col relative" data-testid={`competitor-card-${i}`}>
+            {/* corner links */}
+            <div className="absolute top-4 right-4 flex items-center gap-2">
+              <a
+                href={c.website || searchUrl(`${c.name} official site`)}
+                target="_blank" rel="noreferrer"
+                title="Visit site"
+                data-testid={`competitor-site-${i}`}
+                className="w-8 h-8 rounded-xl bg-neu shadow-neu-sm flex items-center justify-center text-slate2 hover:text-brand-blue transition-all duration-300"
+              >
+                <Globe size={15} strokeWidth={2.2} />
+              </a>
+              <a
+                href={c.linkedin || linkedinUrl(c.name)}
+                target="_blank" rel="noreferrer"
+                title="LinkedIn"
+                data-testid={`competitor-linkedin-${i}`}
+                className="w-8 h-8 rounded-xl bg-neu shadow-neu flex items-center justify-center text-slate2 transition-all duration-300 hover:text-brand-blue hover:shadow-[0_0_18px_rgba(107,146,229,0.75),inset_1px_1px_2px_rgba(255,255,255,0.9)]"
+              >
+                <Linkedin size={15} strokeWidth={2.2} />
+              </a>
+            </div>
+
+            <div className="flex items-center gap-3 mb-4 pr-20">
+              <div className="w-10 h-10 rounded-2xl shadow-neu-inset flex items-center justify-center text-brand-purple font-extrabold shrink-0">
                 {c.name?.[0] || "?"}
               </div>
               <h3 className="text-[18px] font-bold text-ink leading-tight">{c.name}</h3>

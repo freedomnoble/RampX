@@ -90,7 +90,14 @@ export default function Dashboard({ onAuthOpen }) {
                 <NeuTag color="pink">{topRelease.date || "Recent"}</NeuTag>
                 <p className="text-[15px] font-bold text-ink mt-2 leading-snug">{topRelease.title}</p>
                 <p className="text-[13px] text-slate2 mt-1">{topRelease.summary}</p>
-                {topRelease.url && <a href={topRelease.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs font-bold text-brand-blue mt-2">Read <ArrowUpRight size={13} /></a>}
+                <a
+                  href={topRelease.url || `https://www.google.com/search?q=${encodeURIComponent(`${ws.company_name} ${topRelease.title}`)}`}
+                  target="_blank" rel="noreferrer"
+                  data-testid="release-see-more"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-brand-blue mt-2"
+                >
+                  See more <ArrowUpRight size={13} />
+                </a>
               </div>
             ) : <p className="text-sm text-slate2 mb-4">No releases found.</p>}
 
