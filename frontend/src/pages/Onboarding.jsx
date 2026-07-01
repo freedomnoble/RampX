@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Search, Sparkles, Building2, Boxes } from "lucide-react";
+import { ArrowRight, Search, Sparkles, Building2, Boxes, LogIn } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { NeuCard, NeuButton, NeuInput } from "@/components/neu";
+import AuthModal from "@/components/AuthModal";
 
 const LOADING_STEPS = [
   "Finding the company website…",
@@ -16,6 +17,7 @@ const LOADING_STEPS = [
 export default function Onboarding() {
   const { research, workspace } = useApp();
   const navigate = useNavigate();
+  const [loginOpen, setLoginOpen] = useState(false);
   const [step, setStep] = useState(0);
   const [company, setCompany] = useState("");
   const [productArea, setProductArea] = useState("");
@@ -47,6 +49,13 @@ export default function Onboarding() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
+      <button
+        data-testid="onboard-login"
+        onClick={() => setLoginOpen(true)}
+        className="fixed top-5 right-5 z-40 flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold text-brand-blue bg-neu shadow-neu hover:shadow-neu-hover active:shadow-neu-inset transition-all"
+      >
+        <LogIn size={16} /> Log in
+      </button>
       <div className="w-full max-w-xl">
         <div className="text-center mb-10 animate-fade-up">
           <h1 className="text-4xl sm:text-5xl font-extrabold text-ink tracking-tight">
@@ -130,6 +139,12 @@ export default function Onboarding() {
           )}
         </AnimatePresence>
       </div>
+      <AuthModal
+        open={loginOpen}
+        onClose={() => setLoginOpen(false)}
+        initialMode="login"
+        onSuccess={() => navigate("/dashboard")}
+      />
     </div>
   );
 }

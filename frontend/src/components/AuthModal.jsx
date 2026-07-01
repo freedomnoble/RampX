@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { NeuButton, NeuInput } from "@/components/neu";
 
-export default function AuthModal({ open, onClose }) {
+export default function AuthModal({ open, onClose, initialMode = "register", onSuccess }) {
   const { register, login } = useApp();
-  const [mode, setMode] = useState("register");
+  const [mode, setMode] = useState(initialMode);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (open) { setMode(initialMode); setError(""); }
+  }, [open, initialMode]);
 
   if (!open) return null;
 
@@ -23,7 +27,7 @@ export default function AuthModal({ open, onClose }) {
       ? await register(email, password, name)
       : await login(email, password);
     setLoading(false);
-    if (res.ok) onClose();
+    if (res.ok) { onClose(); onSuccess && onSuccess(); }
     else setError(res.error);
   };
 
