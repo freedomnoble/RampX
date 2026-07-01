@@ -1,14 +1,7 @@
 import React, { useState } from "react";
-import { Plus, Trash2, UserPlus } from "lucide-react";
+import { Plus, Trash2, UserPlus, User } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { NeuCard, NeuInput, NeuButton, NeuTag } from "@/components/neu";
-
-const AVATARS = [
-  "https://images.unsplash.com/photo-1560250097-0b93528c311a?crop=entropy&cs=srgb&fm=jpg&w=200&q=80",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=srgb&fm=jpg&w=200&q=80",
-  "https://images.pexels.com/photos/11655430/pexels-photo-11655430.jpeg?auto=compress&cs=tinysrgb&w=200",
-  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=srgb&fm=jpg&w=200&q=80",
-];
 
 export default function BoardSeats({ full }) {
   const { workspace, updateWorkspace, uid } = useApp();
@@ -18,10 +11,9 @@ export default function BoardSeats({ full }) {
 
   const addMember = () => {
     if (!form.name.trim()) return;
-    const avatar = AVATARS[board.length % AVATARS.length];
     updateWorkspace((ws) => ({
       ...ws,
-      board: [...(ws.board || []), { id: uid(), avatar, ...form }],
+      board: [...(ws.board || []), { id: uid(), ...form }],
     }));
     setForm({ name: "", role: "", department: "", notes: "" });
     setAdding(false);
@@ -75,7 +67,9 @@ export default function BoardSeats({ full }) {
               >
                 <Trash2 size={13} />
               </button>
-              <img src={m.avatar} alt={m.name} className="w-14 h-14 rounded-full object-cover shadow-neu mb-2" />
+              <div className="w-14 h-14 rounded-full shadow-neu flex items-center justify-center text-slate2 mb-2">
+                <User size={26} strokeWidth={2} />
+              </div>
               <p className="font-bold text-ink text-sm leading-tight">{m.name}</p>
               <p className="text-xs text-slate2">{m.role}</p>
               {m.department && <NeuTag color="purple" className="mt-2">{m.department}</NeuTag>}
