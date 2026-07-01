@@ -56,8 +56,8 @@ export default function BoardSeats({ full }) {
         <div className="text-center py-8 text-slate2 text-sm">
           No board members yet — assign the people you meet across teams.
         </div>
-      ) : (
-        <div className={"grid gap-4 " + (full ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-2 md:grid-cols-3")}>
+      ) : full ? (
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {board.map((m) => (
             <NeuCard key={m.id} hover className="p-4 flex flex-col items-center text-center relative" data-testid={`board-member-${m.id}`}>
               <button
@@ -73,9 +73,40 @@ export default function BoardSeats({ full }) {
               <p className="font-bold text-ink text-sm leading-tight">{m.name}</p>
               <p className="text-xs text-slate2">{m.role}</p>
               {m.department && <NeuTag color="purple" className="mt-2">{m.department}</NeuTag>}
-              {full && m.notes && <p className="text-xs text-slate2 mt-2 italic">{m.notes}</p>}
+              {m.notes && <p className="text-xs text-slate2 mt-2 italic">{m.notes}</p>}
             </NeuCard>
           ))}
+        </div>
+      ) : (
+        <div className="relative w-full" style={{ height: `${140 + Math.min(board.length, 6) * 4}px` }} data-testid="board-arc">
+          {board.map((m, i) => {
+            const n = board.length;
+            const t = n === 1 ? 0.5 : i / (n - 1);
+            const leftPct = n === 1 ? 50 : 8 + t * 84;
+            const top = (1 - Math.sin(Math.PI * t)) * 78;
+            return (
+              <div
+                key={m.id}
+                data-testid={`board-member-${m.id}`}
+                className="absolute flex flex-col items-center text-center group"
+                style={{ left: `${leftPct}%`, top: `${top}px`, transform: "translateX(-50%)", width: "88px" }}
+              >
+                <button
+                  onClick={() => remove(m.id)}
+                  data-testid={`board-remove-${m.id}`}
+                  className="absolute -top-1 -right-1 z-10 text-slate2 hover:text-brand-pink p-1 rounded-full bg-neu shadow-neu-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                >
+                  <Trash2 size={11} />
+                </button>
+                <div className="w-14 h-14 rounded-full shadow-neu flex items-center justify-center text-slate2 mb-1.5 hover:shadow-neu-hover transition-all">
+                  <User size={24} strokeWidth={2} />
+                </div>
+                <p className="font-bold text-ink text-[13px] leading-tight truncate w-full">{m.name}</p>
+                <p className="text-[11px] text-slate2 leading-tight truncate w-full">{m.role}</p>
+                {m.department && <span className="text-[10px] font-bold text-brand-purple mt-0.5 truncate w-full">{m.department}</span>}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
