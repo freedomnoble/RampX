@@ -1,54 +1,63 @@
-import { useEffect } from "react";
+import React, { useState } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
-import { HOME } from "@/constants/testIds";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { AppProvider, useApp } from "@/context/AppContext";
+import TopNav from "@/components/TopNav";
+import AuthModal from "@/components/AuthModal";
+import Onboarding from "@/pages/Onboarding";
+import Dashboard from "@/pages/Dashboard";
+import CompanyPage from "@/pages/CompanyPage";
+import BoardPage from "@/pages/BoardPage";
+import CompetitorsPage from "@/pages/CompetitorsPage";
+import GoalsPage from "@/pages/GoalsPage";
+import DecisionsPage from "@/pages/DecisionsPage";
+import LearningPage from "@/pages/LearningPage";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+function RequireWorkspace({ children }) {
+  const { workspace, authChecked } = useApp();
+  const location = useLocation();
+  if (!authChecked) return <div className="min-h-screen flex items-center justify-center text-slate2">Loading…</div>;
+  if (!workspace) return <Navigate to="/" replace state={{ from: location }} />;
+  return children;
+}
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
-
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
-
+function Shell({ children }) {
+  const [authOpen, setAuthOpen] = useState(false);
   return (
-    <div>
-      <header className="App-header">
-        <a
-          data-testid={HOME.emergentLink}
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
+    <>
+      <TopNav onAuthOpen={() => setAuthOpen(true)} />
+      {React.cloneElement(children, { onAuthOpen: () => setAuthOpen(true) })}
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+    </>
   );
-};
+}
+
+function AppRoutes() {
+  const { authChecked } = useApp();
+  if (!authChecked) return <div className="min-h-screen flex items-center justify-center text-slate2">Loading…</div>;
+  return (
+    <Routes>
+      <Route path="/" element={<Onboarding />} />
+      <Route path="/dashboard" element={<RequireWorkspace><Shell><Dashboard /></Shell></RequireWorkspace>} />
+      <Route path="/company" element={<RequireWorkspace><Shell><CompanyPage /></Shell></RequireWorkspace>} />
+      <Route path="/board" element={<RequireWorkspace><Shell><BoardPage /></Shell></RequireWorkspace>} />
+      <Route path="/competitors" element={<RequireWorkspace><Shell><CompetitorsPage /></Shell></RequireWorkspace>} />
+      <Route path="/goals" element={<RequireWorkspace><Shell><GoalsPage /></Shell></RequireWorkspace>} />
+      <Route path="/decisions" element={<RequireWorkspace><Shell><DecisionsPage /></Shell></RequireWorkspace>} />
+      <Route path="/learning" element={<RequireWorkspace><Shell><LearningPage /></Shell></RequireWorkspace>} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <AppProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </AppProvider>
     </div>
   );
 }
