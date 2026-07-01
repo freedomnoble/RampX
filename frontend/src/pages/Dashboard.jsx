@@ -34,12 +34,21 @@ export default function Dashboard({ onAuthOpen }) {
   const news = ws.news || [];
   const topRelease = releases[0];
 
+  const CHARCOAL = "#3A3F4A";
+  const emboss = {
+    color: CHARCOAL,
+    textShadow: "-1px -1px 1px rgba(255,255,255,0.85), 2px 2px 3px rgba(174,174,192,0.75)",
+  };
+
   return (
     <div className="max-w-[1600px] mx-auto px-4 sm:px-8 pt-28 pb-16">
-      <div className="mb-8 animate-fade-up">
-        <p className="text-[13px] text-slate2 font-semibold uppercase tracking-wide">Ramping up at</p>
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-ink tracking-tight">{ws.company_name}</h1>
-        <p className="text-[15px] text-slate2 mt-1">{ws.product_area}</p>
+      <div
+        className="mb-8 animate-fade-up rounded-3xl shadow-neu-inset px-6 sm:px-10 py-7"
+        data-testid="ramp-banner"
+      >
+        <p className="text-[13px] font-bold uppercase tracking-[0.22em]" style={emboss}>Ramping up at</p>
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05] mt-1" style={emboss}>{ws.company_name}</h1>
+        <p className="text-lg font-semibold mt-2" style={emboss}>{ws.product_area}</p>
       </div>
 
       {!user && <SaveBanner onOpen={onAuthOpen} />}
