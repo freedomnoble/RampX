@@ -59,9 +59,26 @@ body {
     user-select: none;
 }
 body.app-hidden .protect {
-    filter: blur(20px);
-    transition: filter 0.08s ease;
+    filter: blur(24px);
+    transition: filter 0.05s ease;
 }
+
+/* opaque guard panel that blanks the whole screen on capture attempts */
+.screen-guard {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    background: #ECF0F3;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: #A6B4C8;
+    letter-spacing: 0.02em;
+}
+body.app-hidden .screen-guard { display: flex; }
+
 @media print {
     .protect { visibility: hidden !important; }
     body::before {

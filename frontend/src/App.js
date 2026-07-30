@@ -28,12 +28,15 @@ function Shell({ children }) {
   const [authOpen, setAuthOpen] = useState(false);
   useContentProtection();
   return (
-    <>
+    <div className="protect">
       <TopNav onAuthOpen={() => setAuthOpen(true)} />
       {React.cloneElement(children, { onAuthOpen: () => setAuthOpen(true) })}
       <TaskDrawer />
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
-    </>
+      <div className="screen-guard" aria-hidden="true">
+        <span>Protected content · screenshots are disabled</span>
+      </div>
+    </div>
   );
 }
 
