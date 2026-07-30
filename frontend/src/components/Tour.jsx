@@ -35,13 +35,26 @@ export default function Tour({ steps, onClose }) {
   const next = () => (i < steps.length - 1 ? setI(i + 1) : onClose());
   const prev = () => i > 0 && setI(i - 1);
 
-  // tooltip placement
+  // tooltip placement — kept inside the viewport
   const vh = window.innerHeight;
-  const below = rect ? rect.top + rect.height + 16 : vh / 2;
-  const placeBelow = !rect || below < vh - 220;
-  const tipTop = rect
-    ? (placeBelow ? rect.top + rect.height + PADDING + 8 : rect.top - 8)
-    : vh / 2;
+  const TIP_EST = 220;
+  let tipTop;
+  let translate;
+  if (!rect) {
+    tipTop = vh / 2;
+    translate = "translate(-50%,-50%)";
+  } else {
+    const below = rect.top + rect.height + PADDING + 8;
+    const placeBelow = below + TIP_EST < vh;
+    if (placeBelow) {
+      tipTop = Math.min(below, vh - 24);
+      translate = "translateX(-50%)";
+    } else {
+      // place above the target, but never above the top edge
+      tipTop = Math.max(rect.top - 8, TIP_EST + 24);
+      translate = "translate(-50%,-100%)";
+    }
+  }
 
   return (
     <div className="fixed inset-0 z-[120]" data-testid="tour">
@@ -68,8 +81,8 @@ export default function Tour({ steps, onClose }) {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="absolute left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-sm"
-          style={{ top: tipTop, transform: placeBelow ? "translateX(-50%)" : "translate(-50%,-100%)" }}
+          className="absolute left-1/2 w-[calc(100%-2rem)] max-w-sm"
+          style={{ top: tipTop, transform: translate }}
         >
           <div className="bg-neu rounded-3xl shadow-neu p-6 relative">
             <button onClick={onClose} data-testid="tour-close" className="absolute top-4 right-4 text-slate2 hover:text-ink rounded-full p-1.5 shadow-neu-sm">
