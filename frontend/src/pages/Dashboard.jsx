@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Target, Rocket, Newspaper, GraduationCap, ArrowUpRight, Plus, Sparkles } from "lucide-react";
+import { Target, Rocket, Newspaper, GraduationCap, ArrowUpRight, Plus, Sparkles, Compass } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { NeuCard, NeuTag } from "@/components/neu";
 import BoardSeats from "@/components/BoardSeats";
 import LearningDeck from "@/components/LearningDeck";
 import CompetitorGrid from "@/components/CompetitorGrid";
+import Tour from "@/components/Tour";
+
+const TOUR_STEPS = [
+  { selector: '[data-testid="ramp-banner"]', title: "Your command center", body: "Everything about your new company, organized in one place. Use the top nav to switch between Company, Board, Competitors, Goals, Decisions and Learning." },
+  { selector: '[data-testid="goals-card"]', title: "Company goals", body: "Set the goals that matter — every decision you log can be tagged to them, so your work always ladders up." },
+  { selector: '[data-testid="board-card"]', title: "Your board", body: "The people across teams who help you get things done. Click anyone to assign a task or email them." },
+  { selector: '[data-testid="learning-card"]', title: "Learn the space", body: "A fresh concept every day. Swipe or flip cards, and tap “…more” to go deeper." },
+  { selector: '[data-testid="release-card"]', title: "Live company news", body: "The latest releases and shareholder news, pulled from the web. Tap “See more” for the source." },
+  { selector: '[data-testid="competitor-grid"]', title: "Competitive landscape", body: "Your top 4 rivals — strengths, weaknesses, how you win, and their latest features." },
+  { selector: '[data-testid="task-fab"]', title: "Weekly game plan", body: "Open your task planner for best-practice moves for your first 30–60 days, broken down by day." },
+];
 
 function SaveBanner({ onOpen }) {
   return (
@@ -33,6 +44,20 @@ export default function Dashboard({ onAuthOpen }) {
   const releases = ws.releases || [];
   const news = ws.news || [];
   const topRelease = releases[0];
+  const [tourOn, setTourOn] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem("rampx_run_tour") && !localStorage.getItem("rampx_tour_done")) {
+      const t = setTimeout(() => setTourOn(true), 600);
+      return () => clearTimeout(t);
+    }
+  }, []);
+
+  const endTour = () => {
+    setTourOn(false);
+    sessionStorage.removeItem("rampx_run_tour");
+    localStorage.setItem("rampx_tour_done", "1");
+  };
 
   const CHARCOAL = "#3A3F4A";
   const emboss = {
@@ -42,13 +67,22 @@ export default function Dashboard({ onAuthOpen }) {
 
   return (
     <div className="max-w-[1600px] mx-auto px-4 sm:px-8 pt-28 pb-16">
+      {tourOn && <Tour steps={TOUR_STEPS} onClose={endTour} />}
       <div
-        className="mb-8 animate-fade-up rounded-3xl shadow-neu-inset px-6 sm:px-10 py-7"
+        className="mb-8 animate-fade-up rounded-3xl shadow-neu-inset px-6 sm:px-10 py-7 relative"
         data-testid="ramp-banner"
       >
         <p className="text-[13px] font-bold uppercase tracking-[0.22em]" style={emboss}>Ramping up at</p>
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05] mt-1" style={emboss}>{ws.company_name}</h1>
         <p className="text-lg font-semibold mt-2" style={emboss}>{ws.product_area}</p>
+        <button
+          onClick={() => setTourOn(true)}
+          data-testid="take-tour-btn"
+          className="absolute top-5 right-5 flex items-center gap-1.5 text-xs font-bold text-brand-blue rounded-full px-3.5 py-2 shadow-neu hover:shadow-neu-hover active:shadow-neu-inset transition-all"
+          title="Take the tour"
+        >
+          <Compass size={14} /> <span className="hidden sm:inline">Tour</span>
+        </button>
       </div>
 
       {!user && <SaveBanner onOpen={onAuthOpen} />}
@@ -92,7 +126,7 @@ export default function Dashboard({ onAuthOpen }) {
 
         {/* Latest Release — right */}
         <div className="lg:col-span-3 order-2 lg:order-3">
-          <NeuCard className="p-6 h-full" data-testid="release-card">
+          <NeuCard className="p-6 h-full protect" data-testid="release-card">
             <h3 className="text-[18px] font-bold text-ink flex items-center gap-2 mb-4"><Rocket size={18} className="text-brand-pink" /> Latest from {ws.company_name}</h3>
             {topRelease ? (
               <div className="rounded-2xl shadow-neu-inset p-4 mb-4">
@@ -125,7 +159,7 @@ export default function Dashboard({ onAuthOpen }) {
       </div>
 
       {/* Competitors — full width bottom */}
-      <div className="mt-8 lg:mt-10">
+      <div className="mt-8 lg:mt-10 protect">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-[20px] font-bold text-ink">Competitive landscape</h2>
           <Link to="/competitors" className="text-sm font-semibold text-brand-blue" data-testid="competitors-link">Details →</Link>

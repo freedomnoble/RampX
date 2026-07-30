@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Search, Sparkles, Building2, Boxes, LogIn } from "lucide-react";
+import { ArrowRight, Search, Sparkles, Building2, Boxes, LogIn, Link2 } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { NeuCard, NeuButton, NeuInput } from "@/components/neu";
 import AuthModal from "@/components/AuthModal";
@@ -17,9 +17,11 @@ const LOADING_STEPS = [
 export default function Onboarding() {
   const { research, workspace } = useApp();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loginOpen, setLoginOpen] = useState(false);
   const [step, setStep] = useState(0);
-  const [company, setCompany] = useState("");
+  const [company, setCompany] = useState(location.state?.company || "");
+  const [url, setUrl] = useState("");
   const [productArea, setProductArea] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
@@ -39,7 +41,8 @@ export default function Onboarding() {
     setError("");
     setLoading(true);
     try {
-      await research(company.trim(), productArea.trim());
+      await research(company.trim(), productArea.trim(), url.trim());
+      sessionStorage.setItem("rampx_run_tour", "1");
       navigate("/dashboard");
     } catch (e) {
       setError("We couldn't complete the research. Please try again.");
@@ -104,6 +107,18 @@ export default function Onboarding() {
                   onChange={(e) => setCompany(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && company.trim() && setStep(1)}
                 />
+                <div className="mt-3 relative">
+                  <Link2 size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A6B4C8]" />
+                  <NeuInput
+                    data-testid="onboard-url"
+                    className="!pl-11"
+                    placeholder="Company website (optional)"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && company.trim() && setStep(1)}
+                  />
+                </div>
+                <p className="text-xs text-slate2 mt-2">Adding a site helps us pull more accurate, up-to-date info.</p>
                 <div className="flex justify-end mt-6">
                   <NeuButton data-testid="onboard-next" disabled={!company.trim()} onClick={() => setStep(1)}>
                     Next <ArrowRight size={16} className="inline ml-1" />

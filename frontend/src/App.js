@@ -5,6 +5,7 @@ import { AppProvider, useApp } from "@/context/AppContext";
 import TopNav from "@/components/TopNav";
 import AuthModal from "@/components/AuthModal";
 import TaskDrawer from "@/components/TaskDrawer";
+import Landing from "@/pages/Landing";
 import Onboarding from "@/pages/Onboarding";
 import Dashboard from "@/pages/Dashboard";
 import CompanyPage from "@/pages/CompanyPage";
@@ -13,6 +14,7 @@ import CompetitorsPage from "@/pages/CompetitorsPage";
 import GoalsPage from "@/pages/GoalsPage";
 import DecisionsPage from "@/pages/DecisionsPage";
 import LearningPage from "@/pages/LearningPage";
+import { useContentProtection } from "@/lib/useContentProtection";
 
 function RequireWorkspace({ children }) {
   const { workspace, authChecked } = useApp();
@@ -24,6 +26,7 @@ function RequireWorkspace({ children }) {
 
 function Shell({ children }) {
   const [authOpen, setAuthOpen] = useState(false);
+  useContentProtection();
   return (
     <>
       <TopNav onAuthOpen={() => setAuthOpen(true)} />
@@ -39,7 +42,8 @@ function AppRoutes() {
   if (!authChecked) return <div className="min-h-screen flex items-center justify-center text-slate2">Loading…</div>;
   return (
     <Routes>
-      <Route path="/" element={<Onboarding />} />
+      <Route path="/" element={<Landing />} />
+      <Route path="/start" element={<Onboarding />} />
       <Route path="/dashboard" element={<RequireWorkspace><Shell><Dashboard /></Shell></RequireWorkspace>} />
       <Route path="/company" element={<RequireWorkspace><Shell><CompanyPage /></Shell></RequireWorkspace>} />
       <Route path="/board" element={<RequireWorkspace><Shell><BoardPage /></Shell></RequireWorkspace>} />

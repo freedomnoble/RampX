@@ -11,7 +11,9 @@ export default function CompetitorsPage() {
       <p className="text-[15px] text-slate2 mb-8">
         The top players in {ws.product_area} — their strengths, weaknesses, how {ws.company_name} differs, and what they shipped recently.
       </p>
-      <CompetitorGrid competitors={ws.competitors} companyName={ws.company_name} />
+      <div className="protect">
+        <CompetitorGrid competitors={ws.competitors} companyName={ws.company_name} />
+      </div>
     </div>
   );
 }

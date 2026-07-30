@@ -55,8 +55,8 @@ export function AppProvider({ children }) {
     });
   }, [persist, user]);
 
-  const research = async (company_name, product_area) => {
-    const { data } = await api.post("/research", { company_name, product_area });
+  const research = async (company_name, product_area, url = "") => {
+    const { data } = await api.post("/research", { company_name, product_area, url });
     const ws = {
       ...data,
       goals: (data.goals_suggestions || []).slice(0, 3).map((t) => ({ id: uid(), title: t, description: "", source: "suggested" })),

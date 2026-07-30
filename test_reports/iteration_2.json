@@ -1,0 +1,41 @@
+{
+  "summary": "Iteration 2 e2e testing for landing page + optional URL + tour + content protection. Backend: 17/17 pytest cases pass including new /api/research with url payload (verifies competitor.website + competitor.linkedin fields, 12 flashcards, 4 competitors). Frontend live flow verified end-to-end: Landing renders H1, landing-company input, JSON-LD (SoftwareApplication + FAQPage + $4.95), faq-0..5, landing-start/pricing-start/cta-start, landing-login opens AuthModal (closable via auth-close). Typing 'Notion' on landing then landing-start navigates to /start with onboard-company prefilled. onboard-url field is visible; submitting company + url + product-area triggers ~40s research and lands on /dashboard. Tour overlay auto-appears with 7 steps ('Step 7 of 7 - Weekly game plan' seen with Done button); tour-next/tour-prev/tour-skip all present; take-tour-btn restarts tour; tour-skip closes it. All required dashboard testids present (goals-card, board-card, learning-card, release-card, competitor-grid, task-fab). Content protection: both release-card and competitor-grid are inside .protect subtree; contextmenu event is preventDefault-ed on release-card. No console errors observed.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Dashboard tour final step", "issues": ["Step 7 of 7 (task-fab spotlight) places the tour popover near the bottom-right FAB; on 1920x1080 the Done button sits below the fold requiring scroll to click. Consider clamping popover Y so it stays in viewport when the target is near the page bottom."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_backend.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "(Optional) Tour.jsx: clamp popover position so it never renders below the viewport when the last target is at the page bottom (task-fab)."
+  ],
+  "critical_code_review_comments": [
+    "server.py ResearchInput.url is Optional[str]=''; run_research strips/passes through fine. scraper.research_company accepts empty url and falls back to DDG lookup - good.",
+    "Landing.jsx JSON-LD is injected via dangerouslySetInnerHTML at component render; content is static so this is safe. Good for SEO.",
+    "Onboarding useEffect auto-redirects to /dashboard when workspace exists — this means a returning user who clicks 'Build my dashboard' on landing will bypass the URL/product-area form. Not necessarily a bug but note if intent is to allow re-onboarding.",
+    "sessionStorage.setItem('rampx_run_tour','1') controls tour visibility; Dashboard reads it once and clears. Correctly forces tour on first entry after onboarding.",
+    "useContentProtection is mounted only inside Shell (post-auth routes), so landing page is intentionally not protected — consistent with SEO/JSON-LD needing to be scrapeable.",
+    "Content protection is best-effort (documented in FAQ); actual screenshot/scrape blocking is not possible in browsers — copy is correct.",
+    "AuthModal has no ESC-to-close handler; only auth-close button closes it. Minor UX gap.",
+    "Backend /api/research still returns a generic 500 'Research failed' on any exception — no error type differentiation. Fine for MVP but limits observability."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_backend.py"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Admin admin@rampx.io / admin123 (seeded). Test users created dynamically e2e_<uuid>@rampx.io / test1234.",
+  "seed_data_creation": "Ephemeral e2e_* users + one workspace with company_name='Notion', product_area='team productivity software', url='https://www.notion.so' created via the live UI research call.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend tests at /app/backend/tests/test_backend.py (pytest with xdist, 2 workers, ~90s incl. two Gemini research calls). Frontend flow: Landing '/' -> hero landing-company -> landing-start -> /start prefilled -> onboard-url (optional) -> onboard-next -> onboard-product -> onboard-start -> ~40s research -> /dashboard -> tour auto-runs (sessionStorage flag 'rampx_run_tour'). take-tour-btn restarts tour. Content protect classes on release-card and competitor-grid (or ancestor). AuthModal closes only via [data-testid=auth-close], not ESC.",
+  "rca of the issue": "No blocking issues. Only cosmetic: on 7th (last) tour step targeting task-fab, the popover renders below the fold on 1920x1080 - purely a positioning improvement in Tour.jsx."
+}

@@ -97,6 +97,7 @@ class LoginInput(BaseModel):
 class ResearchInput(BaseModel):
     company_name: str
     product_area: str
+    url: Optional[str] = ""
 
 
 class WorkspaceInput(BaseModel):
@@ -176,9 +177,9 @@ def _parse_json(text):
     return json.loads(text)
 
 
-async def run_research(company_name, product_area):
+async def run_research(company_name, product_area, url=""):
     context = await asyncio.to_thread(
-        scraper_mod.research_company, company_name, product_area
+        scraper_mod.research_company, company_name, product_area, url
     )
     chat = LlmChat(
         api_key=EMERGENT_LLM_KEY,
@@ -207,7 +208,7 @@ async def research(input: ResearchInput):
     if not input.company_name.strip():
         raise HTTPException(status_code=400, detail="Company name required")
     try:
-        data = await run_research(input.company_name.strip(), input.product_area.strip())
+        data = await run_research(input.company_name.strip(), input.product_area.strip(), (input.url or "").strip())
         return data
     except Exception as e:
         logger.error("research error: %s", e)

@@ -13,7 +13,7 @@ export default function CompanyPage() {
       </h1>
       <p className="text-[15px] text-slate2 mb-8">{ws.product_area}</p>
 
-      <NeuCard className="p-7 mb-8" data-testid="company-overview">
+      <NeuCard className="p-7 mb-8 protect" data-testid="company-overview">
         <h2 className="text-[20px] font-bold text-ink mb-3">About the company</h2>
         <p className="text-[15px] text-slate2 leading-relaxed">{ws.overview}</p>
         {ws.website && (
@@ -23,7 +23,7 @@ export default function CompanyPage() {
         )}
       </NeuCard>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 protect">
         <NeuCard className="p-6" data-testid="company-releases">
           <h3 className="text-[18px] font-bold text-ink flex items-center gap-2 mb-4"><Rocket size={18} className="text-brand-pink" /> Latest releases</h3>
           <div className="space-y-3">

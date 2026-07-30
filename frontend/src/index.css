@@ -51,3 +51,24 @@ body {
 @layer base {
     [data-debug-wrapper="true"] { display: contents !important; }
 }
+
+/* content protection: blur protected blocks when the app loses focus / on print */
+.protect, .protect * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+body.app-hidden .protect {
+    filter: blur(20px);
+    transition: filter 0.08s ease;
+}
+@media print {
+    .protect { visibility: hidden !important; }
+    body::before {
+        content: "This content is protected and cannot be printed.";
+        display: block;
+        padding: 40px;
+        font-size: 20px;
+        color: #2D3748;
+    }
+}

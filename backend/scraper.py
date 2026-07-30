@@ -97,12 +97,18 @@ def find_company_website(company_name, session):
     return ""
 
 
-def research_company(company_name, product_area):
+def research_company(company_name, product_area, url=""):
     """Gather raw real-time context about a company. Returns dict of sources."""
     session = requests.Session()
     context = {"website": "", "site_text": "", "sources": []}
     try:
-        website = find_company_website(company_name, session)
+        if url:
+            u = url.strip()
+            if not u.startswith("http"):
+                u = "https://" + u
+            website = f"{urlparse(u).scheme}://{urlparse(u).netloc}"
+        else:
+            website = find_company_website(company_name, session)
         context["website"] = website
         if website:
             context["site_text"] = fetch_page_text(website, session)

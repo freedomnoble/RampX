@@ -165,7 +165,25 @@ class TestResearch:
         for f in data["flashcards"]:
             assert "term" in f and "concept" in f
 
-    def test_02_research_empty_name(self):
+    def test_02_research_with_url(self):
+        r = requests.post(f"{API}/research", json={
+            "company_name": "Notion",
+            "product_area": "team productivity software",
+            "url": "https://www.notion.so",
+        }, timeout=120)
+        assert r.status_code == 200, r.text
+        data = r.json()
+        assert "overview" in data and "website" in data
+        assert len(data["competitors"]) == 4
+        # New requirement: competitors carry website + linkedin fields
+        for c in data["competitors"]:
+            assert "website" in c, f"competitor missing website: {c}"
+            assert "linkedin" in c, f"competitor missing linkedin: {c}"
+        assert len(data["flashcards"]) == 12
+        assert len(data["releases"]) >= 3
+        assert len(data["news"]) >= 3
+
+    def test_03_research_empty_name(self):
         r = requests.post(f"{API}/research", json={
             "company_name": "  ",
             "product_area": "x",
